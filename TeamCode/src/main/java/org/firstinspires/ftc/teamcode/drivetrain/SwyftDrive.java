@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.drivetrain;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class SwyftDrive {
     public static class Params {
@@ -36,4 +38,5 @@ public class SwyftDrive {
         public double headingVelGain = 0.0; // shared with turn
     }
     public static Params PARAMS = new Params();
+
 }
