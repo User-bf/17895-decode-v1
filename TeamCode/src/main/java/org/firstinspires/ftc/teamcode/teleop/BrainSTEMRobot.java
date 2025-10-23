@@ -17,16 +17,26 @@ public class BrainSTEMRobot {
     private final Telemetry telemetry;
     HardwareMap map;
     public BasicDrive drive;
-    Collector collector;
-    Shooter shooter;
-    Whisk whisk;
+    public Collector collector;
+    public Shooter shooter;
+    public Whisk whisk;
     public DcMotor frontLeft, frontRight, backLeft, backRight;
+    private ArrayList<Component> subsystem;
     public BrainSTEMRobot(HardwareMap map, Telemetry telemetry) {
         this.map = map;
         this.telemetry = telemetry;
+        subsystem = new ArrayList<>();
         frontLeft = map.get(DcMotor.class, "FL");
         frontRight = map.get(DcMotor.class, "FR");
         backLeft = map.get(DcMotor.class, "BL");
         backRight = map.get(DcMotor.class, "BR");
+        collector = new Collector(map, telemetry);
+        subsystem.add(collector);
+    }
+    public void update() {
+        for (Component c : subsystem) {
+            c.update();
+        }
+        telemetry.update();
     }
 }
