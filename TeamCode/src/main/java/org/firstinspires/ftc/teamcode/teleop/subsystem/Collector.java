@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop.subsystem;
 
+import android.text.style.UpdateAppearance;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -9,7 +11,7 @@ import org.firstinspires.ftc.teamcode.teleop.Component;
 public class Collector implements Component {
     Telemetry telemetry;
     HardwareMap map;
-    Update update;
+    UpdateAppearance update;
     public enum CollectorState {
         FORWARD, OFF, REVERSE
     }

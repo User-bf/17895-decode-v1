@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 public class BasicDrive extends LinearOpMode {
 
     private DcMotor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
-    private double driveSpeed = 0.50;  // Default speed multiplier
+    private double driveSpeed = 0.99;  // Default speed multiplier
 
     @Override
     public void runOpMode() {
@@ -21,7 +21,7 @@ public class BasicDrive extends LinearOpMode {
         backRightMotor = hardwareMap.get(DcMotor.class, "br");
 
         // Set motor directions (adjust based on your robot)
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
