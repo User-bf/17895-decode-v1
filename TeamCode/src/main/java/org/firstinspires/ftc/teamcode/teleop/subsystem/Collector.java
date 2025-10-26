@@ -13,7 +13,7 @@ public class Collector implements Component {
     HardwareMap map;
     UpdateAppearance update;
     public enum CollectorState {
-        FORWARD, OFF, REVERSE
+        IN, OFF, OUT
     }
     CollectorState collectorState;
     private DcMotor collectorMotor;
@@ -34,21 +34,47 @@ public class Collector implements Component {
     public void update () {
         switch(collectorState){
             case OFF:{
-                setCollectorPower(0);
+                collectorOff();
                 break;
             }
-            case FORWARD:{
-                setCollectorPower(0.7);
+            case IN:{
+                collectorIn();
                 break;
             }
-            case REVERSE:{
-                setCollectorPower(-0.7);
+            case OUT:{
+                collectorOut();
                 break;
             }
 
         }
     }
+    public double getPower(){
+        return collectorMotor.getPower();
+    }
+    public CollectorState getState(){
+        return collectorState;
+    }
     public String test () {
         return null;
+    }
+    private void collectorOff() {
+        collectorMotor.setPower(0.0);
+    }
+    private void collectorIn() {
+        collectorMotor.setPower(0.7);
+    }
+    private void collectorOut() {
+        collectorMotor.setPower(-0.7);
+    }
+    public void setIn() {
+        collectorState = CollectorState.IN;
+    }
+
+    public void setOut() {
+        collectorState = CollectorState.OUT;
+    }
+
+    public void setOff() {
+        collectorState = CollectorState.OFF;
     }
 }

@@ -1,80 +1,81 @@
 package org.firstinspires.ftc.teamcode.drivetrain;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import static org.firstinspires.ftc.teamcode.util.Drawing.drawRobot;
+
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-@TeleOp(name="Basic Drive", group="Drive")
-public class BasicDrive extends LinearOpMode {
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.teleop.Component;
+import org.firstinspires.ftc.teamcode.teleop.subsystem.Collector;
+
+
+public class BasicDrive implements Component {
+
+    Telemetry telemetry;
+    HardwareMap map;
+
+    public MecanumDrive drive;
 
     private DcMotor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
+    double leftStickX, leftStickY, rightStickX;
+
+    public BasicDrive(HardwareMap map, Telemetry telemetry){
+        this.map = map;
+        this.telemetry = telemetry;
+
+        frontLeftMotor = map.get(DcMotor.class, "fl");
+        frontRightMotor = map.get(DcMotor.class, "fr");
+        backLeftMotor = map.get(DcMotor.class, "bl");
+        backRightMotor = map.get(DcMotor.class, "br");
+
+        drive = new MecanumDrive(map, new Pose2d(0,0,0));
+    }
     private double driveSpeed = 0.99;  // Default speed multiplier
 
+    // Initialize motors
+
+    // Set motor directions (adjust based on your robot)
+//    frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//    frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//    backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+//    backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+    // Set motor modes
+//    setMotorModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    public void setInputs(double left_stick_x, double left_stick_y, double right_stick_x) {
+        leftStickX = left_stick_x;
+        leftStickY = left_stick_y;
+        rightStickX = left_stick_x;
+    }
+
     @Override
-    public void runOpMode() {
-        // Initialize motors
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
-        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+    public void reset() {
 
-        // Set motor directions (adjust based on your robot)
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        // Set motor modes
-        setMotorModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        waitForStart();
-
-        while (opModeIsActive()) {
-            // Controller Input Mapping
-            // Left stick: Forward/backward and strafe
-            // Right stick: Rotation
-            double y = -gamepad1.left_stick_y;  // Forward/backward
-            double x = gamepad1.left_stick_x;   // Strafing
-            double rx = gamepad1.right_stick_x; // Rotation
-
-            // Mecanum drive calculations
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-
-            // Apply speed multiplier
-            frontLeftPower *= driveSpeed;
-            frontRightPower *= driveSpeed;
-            backLeftPower *= driveSpeed;
-            backRightPower *= driveSpeed;
-
-            // Set motor powers
-            frontLeftMotor.setPower(frontLeftPower);
-            frontRightMotor.setPower(frontRightPower);
-            backLeftMotor.setPower(backLeftPower);
-            backRightMotor.setPower(backRightPower);
-
-            // Telemetry
-            updateTelemetry();
-        }
     }
 
-    private void setMotorModes(DcMotor.RunMode mode) {
-        frontLeftMotor.setMode(mode);
-        frontRightMotor.setMode(mode);
-        backLeftMotor.setMode(mode);
-        backRightMotor.setMode(mode);
+    @Override
+    public void update() {
+//        drive.setDrivePowers(new PoseVelocity2d(
+//                new Vector2d(
+//                        -leftStickY,
+//                        -leftStickX
+//                ),
+//                -rightStickX
+//        ));
+
+        telemetry.addData("x", drive.pose.position.x);
+        telemetry.addData("y", drive.pose.position.y);
+        telemetry.addData("heading (deg)", Math.toDegrees(drive.pose.heading.toDouble()));
     }
 
-    private void updateTelemetry() {
-        telemetry.addData("Speed Multiplier", driveSpeed);
-        telemetry.addData("Controls", "Left Stick: Move/Strafe | Right Stick: Rotate");
-        telemetry.addData("LBumper", "Precision Mode");
-        telemetry.addData("RBumper", "Turbo Mode");
-        telemetry.update();
+    @Override
+    public String test() {
+        return "passed";
     }
 }

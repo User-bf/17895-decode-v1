@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import androidx.core.view.KeyEventDispatcher;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,23 +17,29 @@ import java.util.ArrayList;
 public class BrainSTEMRobot {
     private final Telemetry telemetry;
     HardwareMap map;
-    public BasicDrive drive;
     public Collector collector;
     public Shooter shooter;
     public Whisk whisk;
-    public DcMotor frontLeft, frontRight, backLeft, backRight;
+
+    public BasicDrive drive;
+
+
     private ArrayList<Component> subsystem;
     public BrainSTEMRobot(HardwareMap map, Telemetry telemetry) {
         this.map = map;
         this.telemetry = telemetry;
         subsystem = new ArrayList<>();
-        frontLeft = map.get(DcMotor.class, "FL");
-        frontRight = map.get(DcMotor.class, "FR");
-        backLeft = map.get(DcMotor.class, "BL");
-        backRight = map.get(DcMotor.class, "BR");
         collector = new Collector(map, telemetry);
+        drive = new BasicDrive(map, telemetry);
         subsystem.add(collector);
+        subsystem.add(drive);
     }
+
+    public BrainSTEMRobot(Telemetry telemetry, HardwareMap hardwareMap, Gamepad gamepad1, Telemetry telemetry1) {
+        this.telemetry = telemetry1;
+    }
+
+
     public void update() {
         for (Component c : subsystem) {
             c.update();
