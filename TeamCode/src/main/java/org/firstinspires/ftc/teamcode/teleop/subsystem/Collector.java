@@ -48,7 +48,7 @@ public class Collector implements Component {
 
         }
     }
-    public double getPower(){
+    public double getCollectorPower(){
         return collectorMotor.getPower();
     }
     public CollectorState getState(){
